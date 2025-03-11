@@ -1,0 +1,93 @@
+Fetch all users:
+
+query {
+  users {
+    id
+    name
+    email
+  }
+}
+
+
+Fetch single user:
+
+query {
+  user(id: "1") {
+    id
+    name
+    email
+  }
+}
+
+Add a new user:
+
+mutation {
+  addUser(name: "John Doe", email: "john@example.com") {
+    id
+    name
+    email
+  }
+}
+
+
+To run in a postman:
+
+-- Open postman
+-- click on "New request"
+-- Set the request type to POST
+-- Enter your GraphQL endpoint 
+    http://localhost:4000/graphql
+
+--Go to the headers tab and add 
+key : Content-type
+value:application/json
+
+select body and GraphQL:
+in query sections:
+
+get all users:
+    query {
+    users{
+        id
+        name
+        email
+    }
+    }
+
+get single user:
+
+    query {
+  user(id:7) {
+    id
+    name
+    email
+  }
+}
+
+
+addUser:
+
+   mutation {
+  addUser(name: "John Doe", email: "john@example.com") {
+    id
+    name
+    email
+  }
+}
+
+updateUser:
+
+ mutation {
+  updateUser(id: "7", email: "kathihja123@example.com") {
+    id
+    name
+    email
+  }
+}
+
+
+deleteUser:
+
+  mutation{
+    deleteUser(id: "8")
+  }
