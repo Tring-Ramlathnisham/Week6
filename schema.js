@@ -28,22 +28,22 @@ const resolvers ={
             const { rows } = await pool.query("Select * from users");
             return rows;
         },
-        user: async(__dirname,{id})=>{
+        user: async(_,{id})=>{
             const { rows } = await pool.query("Select * from users where id=$1",[id,]);
             return rows[0];
         },
     },
 
     Mutation:{
-        addUser:async(__dirname,{name,email})=>{
+        addUser:async(_,{name,email})=>{
             const {rows}=await pool.query("Insert into users(name,email) values ($1,$2) returning *",[name,email]);
             return rows[0];
         },
-        updateUser:async(__dirname,{id,email})=>{
+        updateUser:async(_,{id,email})=>{
             const {rows}=await pool.query("Update users set email= $2 where id=$1 returning *",[id,email]);
             return rows[0];
         },
-        deleteUser:async(__dirname,{id})=>{
+        deleteUser:async(_,{id})=>{
             await pool.query("Delete from users where id=$1",[id]);
             return "User deleted successfully.";
         }
