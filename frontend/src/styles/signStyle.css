@@ -1,0 +1,46 @@
+.auth-container {
+    width: 300px;
+    margin: auto;
+    padding: 40px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .sign-button {
+    width: 50%;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+ /* button:hover {
+    background-color: #f7fbf7;
+  }*/
+  
+  p {
+    margin-top: 10px;
+  }
+  
+  span {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  

@@ -1,0 +1,41 @@
+/* Navbar styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px 40px;
+  }
+  
+  /* Company Logo */
+  .logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Navigation Buttons */
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  /* Button Styling */
+  .nav-btn {
+    padding: 10px 15px;
+    border: none;
+    background-color: #4caf50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .signup-btn {
+    background-color: #007bff;
+  }
+  
+  .nav-btn:hover {
+    opacity: 0.8;
+  }
+  
