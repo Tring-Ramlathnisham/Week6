@@ -2,9 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { pool } from "./db.js"; // Assuming you have a separate file for DB connection
 import dotenv from "dotenv";
-import { PubSub } from "graphql-subscriptions";
-import { subscribe } from "graphql";
-const pubsub=new PubSub();
+
 
 dotenv.config();
 
@@ -37,14 +35,14 @@ const resolvers = {
     createPersona: async (_, { input }) => {
     try{
       const result = await pool.query(
-        `INSERT INTO personas (name,image,quote,description,attitudes,painPoints,jobs,activities,"lastModified") VALUES ($1, $2, $3, $4,$5,$6,$7,$8,NOW()) RETURNING *`,
+        `INSERT INTO personas (name,image,quote,description,attitudes,painpoints,jobs,activities,"lastModified") VALUES ($1, $2, $3, $4,$5,$6,$7,$8,NOW()) RETURNING *`,
         [
           input.name,
           input.image || "",
           input.quote || "",
           input.description || "",
           input.attitudes || "",
-          input.painPoints || "",
+          input.painpoints || "",
           input.jobs || "",
           input.activities || "",
         ]);
@@ -53,7 +51,6 @@ const resolvers = {
           throw new Error("Failed to insert persona.");
         }
         const newPersona=result.rows[0];
-        pubsub.publish("PERSONA_UPDATED",{personaUpdated:newPersona});
 
       return newPersona;
     }
@@ -72,20 +69,19 @@ const resolvers = {
                quote = COALESCE($4, quote),
                description = COALESCE($5, description),
                attitudes = COALESCE($6, attitudes),
-               painPoints = COALESCE($7, painPoints),
+               painpoints = COALESCE($7, painpoints),
                jobs = COALESCE($8, jobs),
                activities = COALESCE($9, activities),
                "lastModified" = NOW()
            WHERE id = $1 
            RETURNING *`,
-          [id, input.name, input.image, input.quote, input.description, input.attitudes, input.painPoints, input.jobs, input.activities]
+          [id, input.name, input.image, input.quote, input.description, input.attitudes, input.painpoints, input.jobs, input.activities]
         );
 
         if (result.rowCount === 0) {
           throw new Error(`Persona with ID ${id} not found.`);
         }
         const updatedPersona=result.rows[0];
-        pubsub.publish("PERSONA_UPDATED",{personaUpdated:updatedPersona});
         return updatedPersona;
       } catch (error) {
         console.error("Error updating persona:", error);
@@ -95,7 +91,6 @@ const resolvers = {
     deletePersona: async (_, { id }) => {
       try {
         await pool.query(`DELETE FROM personas WHERE id = $1`, [id]);
-        pubsub.publish("PERSONA_UPDATED", { personaUpdated: null });
         return true;
       } catch (error) {
         console.error("Error deleting persona:", error);
@@ -125,11 +120,6 @@ const resolvers = {
       }
       const token = jwt.sign({ userId: result.rows[0].id }, process.env.JWT_SECRET, { expiresIn: "1h" });
       return { id: result.rows[0].id, email: result.rows[0].email, token };
-    },
-  },
-  Subscription:{
-    personaUpdated:{
-      subscribe:()=>pubsub.asyncIterableIterator(["PERSONA_UPDATED"]),
     },
   },
 };

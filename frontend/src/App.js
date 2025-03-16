@@ -30,6 +30,10 @@ const App = () => {
     cache: new InMemoryCache(),
   });
 
+  const logout=()=>{
+    setAuthToken(null);
+  };
+
   // Reusable Protected Route Component
   const ProtectedRoute = ({ element }) => {
     return authToken ? element : <Navigate to="/login" />;
@@ -44,7 +48,7 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
 
           {/* Protected Routes */}
-          <Route path="/persona" element={<ProtectedRoute element={<PersonaList />} />} />
+          <Route path="/persona" element={<ProtectedRoute element={<PersonaList  onLogout={logout} />}/>} />
           <Route path="/create" element={<ProtectedRoute element={<CreatePersona />} />} />
           <Route path="/edit/:id" element={<ProtectedRoute element={<EditPersona />} />} />
         </Routes>

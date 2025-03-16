@@ -38,7 +38,8 @@ const PersonaList = ({ onLogout }) => {
     <div className="persona-container">
       <div className="header">
         <h2 className="persona-title">Personas</h2>
-        <button className="logout-btn" onClick={onLogout}>Logout</button>
+        <button className="logout-btn" onClick={onLogout}>
+            Logout</button>
       </div>
       <br />
 

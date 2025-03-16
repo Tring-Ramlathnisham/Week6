@@ -7,7 +7,7 @@ const typeDefs = gql`
     quote: String
     description: String
     attitudes: String
-    painPoints: String
+    painpoints: String
     jobs: String
     activities: String
   }
@@ -26,7 +26,7 @@ const typeDefs = gql`
     quote: String
     description: String
     attitudes: String
-    painPoints: String
+    painpoints: String
     jobs: String
     activities: String
     lastModified:String
@@ -51,12 +51,9 @@ const typeDefs = gql`
     signup(name:String!, email: String!, password: String!): User
     login(email: String!, password: String!): User
     updatePersona(id:ID!,input:PersonaInput!):Persona
-    deletePersona(id:ID!):String
+    deletePersona(id:ID!):Boolean
   }
   
-  type Subscription{
-    personaUpdated:Persona
-  }
 `;
 
 export {typeDefs};

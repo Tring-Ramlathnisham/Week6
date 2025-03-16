@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "../styles/PersonaForm.css";
+import { updatePersona } from "../redux/personaSlice";
 
 const defaultImage = "defaultimage.jpg";
 
@@ -29,7 +30,7 @@ const GET_PERSONA = gql`
       quote
       description
       attitudes
-      painPoints
+      painpoints
       jobs
       activities
     }
@@ -70,7 +71,7 @@ const PersonaForm = ({ isEdit }) => {
     quote: "",
     description: "",
     attitudes: "",
-    painPoints: "",
+    painpoints: "",
     jobs: "",
     activities: "",
   });
@@ -95,21 +96,32 @@ const PersonaForm = ({ isEdit }) => {
       alert("File must be less than 5MB");
     }
   };
-
   const [createPersona] = useMutation(CREATE_PERSONA, {
-    refetchQueries:[{query:GET_PERSONAS}],
+    update(cache, { data: { createPersona } }) {
+      try {
+        const existingData = cache.readQuery({ query: GET_PERSONAS }) || { personas: [] };
+  
+        cache.writeQuery({
+          query: GET_PERSONAS,
+          data: { personas: [...existingData.personas, createPersona] },
+        });
+      } catch (error) {
+        console.error("Error updating cache after create:", error);
+      }
+    },
     onCompleted: () => navigate("/persona"),
   });
-
+  
   const [updatePersona] = useMutation(UPDATE_PERSONA, {
     refetchQueries:[{query:GET_PERSONAS}],
     onCompleted: () => navigate("/persona"),
   });
-
+  
   const [deletePersona] = useMutation(DELETE_PERSONA, {
     refetchQueries:[{query:GET_PERSONAS}],
     onCompleted: () => navigate("/persona"),
   });
+  
 
   const handleSubmit = async () => {
     if (!persona.name.trim()) {
@@ -123,7 +135,7 @@ const PersonaForm = ({ isEdit }) => {
       quote: persona.quote || "",
       description: persona.description || "",
       attitudes: persona.attitudes || "",
-      painPoints: persona.painPoints || "",
+      painpoints: persona.painpoints || "",
       jobs: persona.jobs || "",
       activities: persona.activities || "",
     };
@@ -179,7 +191,7 @@ const PersonaForm = ({ isEdit }) => {
         </div>
         <br />
         <div className="grid-container">
-          <div className="grid-item"><label>Pain Points</label><ReactQuill modules={modules} value={persona.painPoints} onChange={(value) => handleChange("painPoints", value)} /></div>
+          <div className="grid-item"><label>Pain Points</label><ReactQuill modules={modules} value={persona.painpoints} onChange={(value) => handleChange("painPoints", value)} /></div>
           <div className="grid-item"><label>Jobs/Needs</label><ReactQuill modules={modules} value={persona.jobs} onChange={(value) => handleChange("jobs", value)} /></div>
           <div className="grid-item"><label>Activities</label><ReactQuill modules={modules} value={persona.activities} onChange={(value) => handleChange("activities", value)} /></div>
         </div>
